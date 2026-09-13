@@ -1,0 +1,3 @@
+# code/forecasting and its tests use only the Python standard library.
+# code/evidence needs the Anthropic SDK for the vision/message LLM calls.
+anthropic>=1.5.0
