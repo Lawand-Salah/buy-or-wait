@@ -11,7 +11,8 @@ For every row in dataset/requests.csv:
      code/planning/.
   4. Generate decision_explanation via one more LLM call.
 
-Writes dataset/output.csv and code/evaluation/usage_report.md.
+Writes output.csv at the repository root (per README.md -- dataset/output.csv
+is only the blank template) and code/evaluation/usage_report.md.
 
 Setup:
     pip install -r code/requirements.txt
@@ -222,7 +223,7 @@ def run(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dataset-dir", default=str(REPO_ROOT / "dataset"))
-    parser.add_argument("--output", default=str(REPO_ROOT / "dataset" / "output.csv"))
+    parser.add_argument("--output", default=str(REPO_ROOT / "output.csv"))
     parser.add_argument("--usage-report", default=str(CODE_DIR / "evaluation" / "usage_report.md"))
     parser.add_argument("--limit", type=int, default=None, help="Process only the first N requests (for a quick smoke test).")
     parser.add_argument("--request-id", default=None, help="Process only this one request_id (for debugging).")

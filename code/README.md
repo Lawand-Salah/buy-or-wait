@@ -32,7 +32,8 @@ dependency (`anthropic`) for the LLM-backed evidence and explanation layer.
   `explanation.py` makes one more LLM call per request for
   `decision_explanation`, grounded only in the already-decided facts.
 - **`main.py`** — the entry point. Loads everything once, loops over
-  `dataset/requests.csv`, writes `dataset/output.csv` and
+  `dataset/requests.csv`, writes the final `output.csv` at the repository
+  root (`dataset/output.csv` is only the blank template) and
   `evaluation/usage_report.md`. A per-request `try/except` means one bad
   row can never lose the whole run — it falls back to a safe
   `not_recommended` row instead.
