@@ -22,6 +22,15 @@ class TestUsageTracker(unittest.TestCase):
         # $1.00 input + $5.00 output per 1M tokens
         self.assertAlmostEqual(totals["claude-haiku-4-5"]["cost"], 6.00)
 
+    def test_cost_resolves_for_a_dated_snapshot_id_not_just_the_bare_alias(self):
+        # The real API returns e.g. "claude-haiku-4-5-20251001", not the
+        # bare "claude-haiku-4-5" alias the pricing table is keyed by.
+        tracker = UsageTracker()
+        tracker.record(model="claude-haiku-4-5-20251001", call_type="vision", input_tokens=1_000_000, output_tokens=1_000_000)
+        totals = tracker.totals_by_model()
+        self.assertTrue(totals["claude-haiku-4-5-20251001"]["cost_known"])
+        self.assertAlmostEqual(totals["claude-haiku-4-5-20251001"]["cost"], 6.00)
+
     def test_unknown_model_reports_cost_as_unknown_not_zero(self):
         tracker = UsageTracker()
         tracker.record(model="some-future-model", call_type="vision", input_tokens=1000, output_tokens=1000)

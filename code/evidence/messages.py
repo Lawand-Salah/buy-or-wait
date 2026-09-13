@@ -54,9 +54,16 @@ MESSAGE_JSON_SCHEMA = {
             ],
         },
         "target_event_id": {"type": ["string", "null"]},
-        "new_status": {"type": ["string", "null"]},
+        "new_status": {
+            "anyOf": [
+                {"type": "string", "enum": ["settled", "pending", "scheduled", "cancelled", "failed"]},
+                {"type": "null"},
+            ]
+        },
         "amendment_category": {"type": ["string", "null"]},
-        "amendment_direction": {"type": ["string", "null"]},
+        "amendment_direction": {
+            "anyOf": [{"type": "string", "enum": ["credit", "debit"]}, {"type": "null"}]
+        },
         "new_amount": {"type": ["number", "null"]},
         "new_currency": {"type": ["string", "null"]},
         "effective_date": {"type": ["string", "null"]},

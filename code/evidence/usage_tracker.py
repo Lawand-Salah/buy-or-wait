@@ -66,11 +66,25 @@ class UsageTracker:
         )
 
     def _cost(self, model: str, input_tokens: int, output_tokens: int) -> Optional[float]:
-        rates = PRICING_PER_MILLION_TOKENS.get(model)
+        rates = self._rates_for(model)
         if rates is None:
             return None
         input_rate, output_rate = rates
         return (input_tokens / 1_000_000) * input_rate + (output_tokens / 1_000_000) * output_rate
+
+    @staticmethod
+    def _rates_for(model: str) -> Optional[Tuple[float, float]]:
+        """The API returns a dated snapshot id (e.g.
+        "claude-haiku-4-5-20251001"), not the bare alias this table is
+        keyed by -- match by prefix so pricing still resolves.
+        """
+        exact = PRICING_PER_MILLION_TOKENS.get(model)
+        if exact is not None:
+            return exact
+        for alias, rates in PRICING_PER_MILLION_TOKENS.items():
+            if model.startswith(alias):
+                return rates
+        return None
 
     def totals_by_model(self) -> Dict[str, dict]:
         """Per-model {calls, input_tokens, output_tokens, cost}."""
